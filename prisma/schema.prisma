@@ -39,42 +39,49 @@ enum Rank {
 }
 
 model User {
-  id        Int             @id @default(autoincrement())
+  id        String          @id @default(uuid())
   email     String          @unique
+  hash      String
   username  String          @unique
-  picture   String
+  picture   String?
   rank      Rank            @default(COPPER)
-  exp       Int
-  coin      Int
+  exp       Int             @default(0)
+  coin      Int             @default(0)
   firstName String?
   lastName  String?
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   requests  Quest[]
   accepts   HuntersQuests[]
+
+  @@map("tblUsers")
 }
 
 model Quest {
-  id              Int             @id @default(autoincrement())
+  id              String          @id @default(uuid())
   title           String
   description     String
-  reward          Int
+  reward          Int             @default(0)
   difficultyLevel Level
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   customer        User            @relation(fields: [customerId], references: [id])
-  customerId      Int
+  customerId      String
   hunters         HuntersQuests[]
   location        String
   startAt         DateTime
   endAt           DateTime
   status          QuestStatus
+
+  @@map("tblQuests")
 }
 
 model HuntersQuests {
-  id      Int   @id @default(autoincrement())
-  user    User  @relation(fields: [userId], references: [id])
-  quest   Quest @relation(fields: [questId], references: [id])
-  userId  Int
-  questId Int
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id])
+  quest   Quest  @relation(fields: [questId], references: [id])
+  userId  String
+  questId String
+
+  @@map("tblHuntersQuests")
 }

@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum QuestStatus {
+  ACTIVE
+  COMPLETED
+  FROZE
+}
+
+enum Level {
+  F
+  E
+  D
+  C
+  B
+  A
+  A_PLUS
+  A_PLUS_PLUS
+}
+
+enum Rank {
+  COPPER
+  IRON
+  SILVER
+  GOLD
+  PLATINUM
+  MITHRIL
+  ORICHALCUM
+  ADAMANTITE
+}
+
+model User {
+  id        Int             @id @default(autoincrement())
+  email     String          @unique
+  username  String          @unique
+  picture   String
+  rank      Rank            @default(COPPER)
+  exp       Int
+  coin      Int
+  firstName String?
+  lastName  String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  requests  Quest[]
+  accepts   HuntersQuests[]
+}
+
+model Quest {
+  id              Int             @id @default(autoincrement())
+  title           String
+  description     String
+  reward          Int
+  difficultyLevel Level
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  customer        User            @relation(fields: [customerId], references: [id])
+  customerId      Int
+  hunters         HuntersQuests[]
+  location        String
+  startAt         DateTime
+  endAt           DateTime
+  status          QuestStatus
+}
+
+model HuntersQuests {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  quest   Quest @relation(fields: [questId], references: [id])
+  userId  Int
+  questId Int
+}

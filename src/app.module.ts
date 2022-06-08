@@ -6,9 +6,10 @@ import { ConfigModule } from './config/config.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { JwtStrategy } from './strategy';
 import { UserModule } from './user/user.module';
+import { QuestModule } from './quest/quest.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, ConfigModule, UserModule, JwtStrategy],
+  imports: [AuthModule, PrismaModule, ConfigModule, UserModule, JwtStrategy, QuestModule],
   controllers: [AppController],
   providers: [AppService],
 })

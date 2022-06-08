@@ -20,12 +20,17 @@ export class AuthService {
     try {
       const user = await this.prisma.user.create({
         data: {
-          username: dto.username,
           email: dto.email,
           hash,
         },
       });
-      return this.signToken(user.id, user.username);
+      const profile = await this.prisma.profile.create({
+        data: {
+          username: dto.username,
+          userId: user.id,
+        },
+      });
+      return this.signToken(user.id, user.email);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {

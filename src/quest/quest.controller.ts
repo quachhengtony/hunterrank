@@ -6,13 +6,19 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
+import { userInfo } from 'os';
 import { GetUser } from 'src/decorator';
+import { JwtGuard } from 'src/guard';
 import { CreateQuestDto, UpdateQuestDto } from './dto';
 import { QuestService } from './quest.service';
 
+@UseGuards(JwtGuard)
 @Controller('quests')
 export class QuestController {
   constructor(private questService: QuestService) {}
@@ -43,7 +49,7 @@ export class QuestController {
   async updateQuest(
     @GetUser('id') userId: string,
     @Param('questId') questId: string,
-    dto: UpdateQuestDto,
+    @Body() dto: UpdateQuestDto,
   ) {
     return this.questService.updateQuest(userId, questId, dto);
   }
@@ -55,5 +61,11 @@ export class QuestController {
     @Param('questId') questId: string,
   ) {
     return this.questService.deleteQuest(userId, questId);
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post(':questId/accept')
+  async accepQuest(@GetUser() user: User, @Param('questId') questId: string) {
+    return this.questService.acceptQuest(user, questId);
   }
 }

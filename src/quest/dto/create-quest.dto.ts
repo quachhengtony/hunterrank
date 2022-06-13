@@ -1,6 +1,7 @@
 import { Level } from '@prisma/client';
 import {
   IsDate,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -37,11 +38,11 @@ export class CreateQuestDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsDate()
-  startAt: Date;
+  @IsDateString()
+  startAt: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsDate()
-  endAt: Date;
+  @IsDateString()
+  endAt: string;
 }

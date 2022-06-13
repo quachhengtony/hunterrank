@@ -1,9 +1,11 @@
 import { Level } from '@prisma/client';
 import {
   IsDate,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   Length,
@@ -11,36 +13,36 @@ import {
 
 export class UpdateQuestDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Length(20, 70)
-  title: string;
+  title?: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Length(20, 1000)
-  description: string;
+  description?: string;
 
   @IsNumber()
-  @IsNotEmpty()
-  reward: number;
+  @IsOptional()
+  reward?: number;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(Level)
-  difficultyLevel: Level;
+  difficultyLevel?: Level;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @IsUrl()
-  location: string;
+  location?: string;
 
   @IsString()
-  @IsNotEmpty()
-  @IsDate()
-  startAt: Date;
+  @IsOptional()
+  @IsDateString()
+  startAt?: string;
 
   @IsString()
-  @IsNotEmpty()
-  @IsDate()
-  endAt: Date;
+  @IsOptional()
+  @IsDateString()
+  endAt?: string;
 }

@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { QuestStatus } from '@prisma/client';
+import { QuestStatus, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateQuestDto, UpdateQuestDto } from './dto';
 
@@ -10,6 +10,15 @@ export class QuestService {
   // TODO: pagination
   async getAllQuests() {
     return await this.prisma.quest.findMany({
+      select: {
+        id: true,
+        title: true,
+        reward: true,
+        difficultyLevel: true,
+        createdAt: true,
+        updatedAt: true,
+        status: true,
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -17,18 +26,22 @@ export class QuestService {
   }
 
   async getQuestById(questId: string) {
-    return await this.prisma.quest.findMany({
+    const quest = await this.prisma.quest.findUnique({
       where: {
         id: questId,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
       include: {
-        customer: true,
+        customer: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
         hunters: true,
       },
     });
+    return quest;
   }
 
   async createQuest(userId: string, dto: CreateQuestDto) {
@@ -82,6 +95,15 @@ export class QuestService {
     return await this.prisma.quest.delete({
       where: {
         id: questToDelete.id,
+      },
+    });
+  }
+
+  async acceptQuest(user: User, questId: string) {
+    return await this.prisma.huntersQuests.create({
+      data: {
+        questId: questId,
+        userId: user.id,
       },
     });
   }

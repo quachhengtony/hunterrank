@@ -99,11 +99,21 @@ export class QuestService {
     });
   }
 
-  async acceptQuest(user: User, questId: string) {
+  async acceptQuest(userId: string, questId: string) {
+    const quest = await this.prisma.quest.findUnique({
+      where: {
+        id: questId,
+      },
+    });
+
+    if (quest.customerId === userId) {
+      throw new ForbiddenException('Access to resource denied');
+    }
+
     return await this.prisma.huntersQuests.create({
       data: {
         questId: questId,
-        userId: user.id,
+        userId: userId,
       },
     });
   }

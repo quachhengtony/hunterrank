@@ -65,7 +65,7 @@ export class QuestController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post(':questId/accept')
-  async accepQuest(@GetUser() user: User, @Param('questId') questId: string) {
-    return this.questService.acceptQuest(user, questId);
+  async accepQuest(@GetUser('id') userId: string, @Param('questId') questId: string) {
+    return this.questService.acceptQuest(userId, questId);
   }
 }

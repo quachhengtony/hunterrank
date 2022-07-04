@@ -19,6 +19,7 @@ export class NotificationsService {
       orderBy: {
         createdAt: 'desc',
       },
+      take: 10,
     });
   }
 }

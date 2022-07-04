@@ -7,7 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { QuestModule } from './quest/quest.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { LoggerMiddleware } from './utils/logger.middleware';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [

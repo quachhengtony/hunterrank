@@ -33,12 +33,18 @@ export class QuestService {
       include: {
         customer: {
           select: {
-            id: true,
-            firstName: true,
-            lastName: true,
+            profile: true,
           },
         },
-        hunters: true,
+        hunters: {
+          include: {
+            user: {
+              select: {
+                profile: true,
+              },
+            },
+          },
+        },
       },
     });
     return quest;

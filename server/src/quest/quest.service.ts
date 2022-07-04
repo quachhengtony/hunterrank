@@ -18,6 +18,17 @@ export class QuestService {
         createdAt: true,
         updatedAt: true,
         status: true,
+        customer: {
+          select: {
+            profile: {
+              select: {
+                id: true,
+                username: true,
+                picture: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

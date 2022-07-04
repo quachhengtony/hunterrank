@@ -2,6 +2,9 @@ import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
+import classNames from "../utils/classNames";
+import Quest from "../components/Quest";
+import { useQuery, useQueryClient } from "react-query";
 
 const user = {
   name: "Tom Cook",
@@ -9,24 +12,44 @@ const user = {
   imageUrl:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
+
 const navigation = [
-  { name: "Home", href: "#", current: true },
-  { name: "Profile", href: "#", current: false },
-  { name: "Resources", href: "#", current: false },
-  { name: "Company Directory", href: "#", current: false },
-  { name: "Openings", href: "#", current: false },
+  { name: "Quest Board", href: "#", current: true },
+  { name: "Your Quests", href: "#", current: false },
+  { name: "Upcoming", href: "#", current: false },
+  { name: "Quests Ranking", href: "#", current: false },
+  { name: "Hunters Ranking", href: "#", current: false },
 ];
+
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
   { name: "Sign out", href: "#" },
 ];
 
-function classNames(...classes: any[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Home() {
+  const queryClient = useQueryClient();
+
+  async function fetchQuests() {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YTFmMDUwYS00YzZkLTQwNjMtODQzMC03Y2JlZjJmY2E4OTQiLCJlbWFpbCI6Im5hbWlAZ21haWwuY29tIiwiaWF0IjoxNjU2OTUxNTE1LCJleHAiOjE2NTY5NTMzMTV9.bbssFvURWTteleldNwpJ6kP0vqUVCz8f36xVaAwe8Xs",
+    };
+    const res = await fetch("http://localhost:4000/api/quests", { headers });
+    return await res.json();
+  }
+
+  const { isLoading, isError, data, error } = useQuery("quests", fetchQuests);
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: Something went wrong.</span>;
+  }
+
   return (
     <>
       <div className="min-h-full">
@@ -317,7 +340,12 @@ export default function Home() {
                     Section title
                   </h2>
                   <div className="rounded-lg bg-white overflow-hidden shadow">
-                    <div className="p-6">{/* Your content */}</div>
+                    <div className="p-6">
+                      {/* Your content */}
+                      {data.map((quest: any) => (
+                        <Quest quest={quest} />
+                      ))}
+                    </div>
                   </div>
                 </section>
               </div>
@@ -329,7 +357,10 @@ export default function Home() {
                     Section title
                   </h2>
                   <div className="rounded-lg bg-white overflow-hidden shadow">
-                    <div className="p-6">{/* Your content */}</div>
+                    <div className="p-6">
+                      {/* Your content */}
+                      <p>HEy</p>
+                    </div>
                   </div>
                 </section>
               </div>

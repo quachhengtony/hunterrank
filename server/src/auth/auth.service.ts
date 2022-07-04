@@ -1,18 +1,37 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { LoginDto, RegisterDto } from './dto';
+import { GoogleLoginDto, LoginDto, RegisterDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Auth, google } from 'googleapis';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
+  private oauthClient: Auth.OAuth2Client;
+
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
     private jwt: JwtService,
-  ) {}
+    private userService: UserService,
+  ) {
+    this.oauthClient = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+    );
+  }
+
+  async googleLogin(dto: GoogleLoginDto) {
+    const tokenInfo = await this.oauthClient.getTokenInfo(dto.token);
+    const user = await this.userService.getUserByEmail(tokenInfo.email);
+    if (user) {
+      return this.signToken(user.id, user.email);
+    }
+    return undefined;
+  }
 
   async register(dto: RegisterDto) {
     const hash = await argon.hash(dto.password);

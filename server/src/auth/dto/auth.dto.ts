@@ -18,3 +18,9 @@ export class RegisterDto extends LoginDto {
   @Length(4, 15)
   username: string;
 }
+
+export class GoogleLoginDto {
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+}

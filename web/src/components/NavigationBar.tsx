@@ -4,13 +4,22 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
 import classNames from "../utils/classNames";
 import { logout } from "../api";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  navigation: any;
   user: any;
 }
 
-const NavigationBar: React.FC<IProps> = ({ navigation, user }) => {
+const navigation = [
+  { name: "Quest Board", href: "/home", current: true },
+  { name: "Your Quests", href: "/your-quests", current: false },
+  { name: "Upcoming", href: "/upcoming", current: false },
+  { name: "Quests Ranking", href: "/quests-ranking", current: false },
+  { name: "Hunters Ranking", href: "/hunters-ranking", current: false },
+];
+
+const NavigationBar: React.FC<IProps> = ({ user }) => {
+  const navigate = useNavigate();
   return (
     <Popover as="header" className="pb-24 bg-indigo-600">
       {({ open }) => (
@@ -58,20 +67,6 @@ const NavigationBar: React.FC<IProps> = ({ navigation, user }) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="origin-top-right z-40 absolute -right-2 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {/* {userNavigation.map((item: any) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))} */}
                       <Menu.Item>
                         {({ active }) => (
                           <a
@@ -81,6 +76,19 @@ const NavigationBar: React.FC<IProps> = ({ navigation, user }) => {
                             )}
                           >
                             Your Profile
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            onClick={() => navigate("/submit-quest")}
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "cursor-pointer block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Submit a Quest
                           </a>
                         )}
                       </Menu.Item>
@@ -143,10 +151,10 @@ const NavigationBar: React.FC<IProps> = ({ navigation, user }) => {
                     {navigation.map((item: any) => (
                       <a
                         key={item.name}
-                        href={item.href}
+                        onClick={() => navigate(item.href)}
                         className={classNames(
                           item.current ? "text-white" : "text-indigo-100",
-                          "text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
+                          "text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10 cursor-pointer"
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >
@@ -292,6 +300,12 @@ const NavigationBar: React.FC<IProps> = ({ navigation, user }) => {
                         ))} */}
                         <a className="cursor-pointer block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800">
                           Your Profile
+                        </a>
+                        <a
+                          onClick={() => navigate("/submit-quest")}
+                          className="cursor-pointer block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
+                        >
+                          Submit a Quest
                         </a>
                         <a
                           onClick={() => logout()}

@@ -70,8 +70,8 @@ export class QuestService {
         reward: dto.reward,
         difficultyLevel: dto.difficultyLevel,
         location: dto.location,
-        startAt: dto.startAt,
-        endAt: dto.endAt,
+        startAt: new Date(dto.startAt).toISOString(),
+        endAt: new Date(dto.endAt).toISOString(),
         status: QuestStatus.ACTIVE,
       },
     });

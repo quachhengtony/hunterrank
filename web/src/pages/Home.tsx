@@ -5,14 +5,6 @@ import { fetchAllQuests, getAuthenticatedUser } from "../api";
 import { useState } from "react";
 import Notification from "../components/overlays/Notification";
 
-const navigation = [
-  { name: "Quest Board", href: "#", current: true },
-  { name: "Your Quests", href: "#", current: false },
-  { name: "Upcoming", href: "#", current: false },
-  { name: "Quests Ranking", href: "#", current: false },
-  { name: "Hunters Ranking", href: "#", current: false },
-];
-
 export default function Home() {
   const [showNotification, setShowNotification] = useState(false);
 
@@ -32,7 +24,7 @@ export default function Home() {
     <>
       <Notification show={showNotification} setShow={setShowNotification} />
       <div className="min-h-full">
-        <NavigationBar navigation={navigation} user={userQuery.data} />
+        <NavigationBar user={userQuery.data} />
 
         <main className="-mt-24 pb-8">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">

@@ -79,7 +79,7 @@ model Profile {
 model Quest {
   id              String      @id @default(uuid())
   title           String
-  description     String
+  description     String      @db.VarChar(2500)
   reward          Int         @default(0)
   difficultyLevel Level
   createdAt       DateTime    @default(now())

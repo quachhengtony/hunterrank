@@ -1,71 +1,23 @@
 import { useState } from "react";
 import Select from "./select/Select";
 
-const difficultyLevels = [
-  {
-    id: 1,
-    name: "F Class:  1~10",
-    avatar:
-      "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 2,
-    name: "E Class: 11~20",
-    avatar:
-      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 3,
-    name: "D Class: 21~30",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 4,
-    name: "C Class: 31~40",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 5,
-    name: "B Class: 41~50",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 6,
-    name: "A Class: 51~60",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 7,
-    name: "A+ Class: 61~70",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 8,
-    name: "A++ Class: 71~",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-];
-
 type IProps = {
   questDto: any;
   setQuestDto: any;
   handleSubmitQuest: any;
+  difficultyLevels: any;
+  difficultyLevelSelected: any;
+  setDifficultyLevelSelected: any;
 };
 
 const QuestForm: React.FC<IProps> = ({
   questDto,
   setQuestDto,
   handleSubmitQuest,
+  difficultyLevels,
+  difficultyLevelSelected,
+  setDifficultyLevelSelected,
 }) => {
-  const [difficultyLevelselected, setDifficultyLevelSelected] = useState(
-    difficultyLevels[0]
-  );
   return (
     <form
       className="space-y-8 divide-y divide-gray-200"
@@ -150,7 +102,7 @@ const QuestForm: React.FC<IProps> = ({
             <div className="sm:col-span-2">
               <Select
                 items={difficultyLevels}
-                selected={difficultyLevelselected}
+                selected={difficultyLevelSelected}
                 setSelected={setDifficultyLevelSelected}
               />
             </div>
@@ -175,7 +127,7 @@ const QuestForm: React.FC<IProps> = ({
                   onChange={(e) =>
                     setQuestDto({
                       ...questDto,
-                      location: "https://meet.google.com/" + e.target.value,
+                      location: e.target.value,
                     })
                   }
                 />
